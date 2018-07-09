@@ -1,16 +1,19 @@
-import React, { Component } from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
-import { createStore, applyMiddleware } from 'redux';
-import { Provider } from 'react-redux';
-import axios from 'axios';
-import axiosMiddleware from 'redux-axios-middleware';
+import React, { Component } from "react";
+import { StyleSheet, View } from "react-native";
+import { createStackNavigator, createBottomTabNavigator } from "react-navigation";
+import { createStore, applyMiddleware } from "redux";
+import { Provider } from "react-redux";
+import axios from "axios";
+import axiosMiddleware from "redux-axios-middleware";
 
-import reducer from './reducer';
-import RepoList from './RepoList';
+import reducer from "./reducer";
+import RepoDetail from "./RepoDetail";
+import RepoList from "./RepoList";
+import Profile from "./Profile";
 
 const client = axios.create({
-  baseURL: 'https://api.github.com',
-  responseType: 'json'
+  baseURL: "https://api.github.com",
+  responseType: "json"
 });
 
 const store = createStore(reducer, applyMiddleware(axiosMiddleware(client)));
@@ -20,7 +23,7 @@ export default class HelloWorldApp extends Component {
     return (
       <Provider store={store}>
         <View style={styles.container}>
-          <RepoList />
+          <Stack />
         </View>
       </Provider>
     );
@@ -30,47 +33,24 @@ export default class HelloWorldApp extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    marginTop: 50
+    backgroundColor: "#fff",
   }
 });
 
-class Bananas extends Component {
-  render() {
-    let pic = {
-      uri: 'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg'
-    };
-    return (
-      <Image source={pic} style={{width: 193, height: 110}}/>
-    );
+const Tabs = createBottomTabNavigator({
+  RepoList: {
+    screen: RepoList
+  },
+  Profile: {
+    screen: Profile
   }
-}
+});
 
-class Blink extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {isShowingText: true};
-
-    // Toggle the state every second
-    setInterval(() => {
-      this.setState(previousState => {
-        return { isShowingText: !previousState.isShowingText };
-      });
-    }, 1000);
+const Stack = createStackNavigator({
+  Home: {
+    screen: Tabs
+  },
+  Detail: {
+    screen: RepoDetail
   }
-
-  render() {
-    let display = this.state.isShowingText ? this.props.text : ' ';
-    return (
-      <Text>{display}</Text>
-    );
-  }
-}
-
-class Greeting extends Component {
-  render() {
-    return (
-      <Text>Hello {this.props.name}!</Text>
-    );
-  }
-}
+});

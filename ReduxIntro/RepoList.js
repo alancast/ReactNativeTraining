@@ -1,17 +1,22 @@
-import React, { Component } from 'react';
-import { View, Text, FlatList, StyleSheet } from 'react-native';
-import { connect } from 'react-redux';
+import React, { Component } from "react";
+import { Text, TouchableOpacity, FlatList, StyleSheet } from "react-native";
+import { connect } from "react-redux";
 
-import { listRepos } from './reducer';
+import { listRepos } from "./reducer";
 
 class RepoList extends Component {
   componentDidMount() {
-    this.props.listRepos('alancast');
+    this.props.listRepos("alancast");
   }
   renderItem = ({ item }) => (
-    <View style={styles.item}>
+    <TouchableOpacity
+      style={styles.item}
+      onPress={() =>
+        this.props.navigation.navigate("Detail", { name: item.name })
+      }
+    >
       <Text>{item.name}</Text>
-    </View>
+    </TouchableOpacity>
   );
   render() {
     const { repos } = this.props;
@@ -32,12 +37,15 @@ const styles = StyleSheet.create({
   item: {
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#ccc'
+    borderBottomColor: "#ccc"
   }
 });
 
 const mapStateToProps = state => {
-  let storedRepositories = state.repos.map(repo => ({ key: repo.id.toString(), ...repo }));
+  let storedRepositories = state.repos.map(repo => ({
+    key: repo.id.toString(),
+    ...repo
+  }));
   return {
     repos: storedRepositories
   };
@@ -47,4 +55,7 @@ const mapDispatchToProps = {
   listRepos
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(RepoList);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(RepoList);
