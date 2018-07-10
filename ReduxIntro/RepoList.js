@@ -5,15 +5,24 @@ import { connect } from "react-redux";
 import { listRepos } from "./reducer";
 
 class RepoList extends Component {
+  static navigationOptions = {
+    title: "RepoList"
+  };
   componentDidMount() {
-    this.props.listRepos("alancast");
+    const { username } = this.props.navigation.state.params;
+    this.props.listRepos(username);
+  }
+  navigateToDetail(name) {
+    const { username } = this.props.navigation.state.params;
+    this.props.navigation.navigate("Detail", {
+      username: username,
+      name: name
+    });
   }
   renderItem = ({ item }) => (
     <TouchableOpacity
       style={styles.item}
-      onPress={() =>
-        this.props.navigation.navigate("Detail", { name: item.name })
-      }
+      onPress={() => this.navigateToDetail(item.name)}
     >
       <Text>{item.name}</Text>
     </TouchableOpacity>

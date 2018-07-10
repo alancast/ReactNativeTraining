@@ -9,8 +9,8 @@ class RepoDetail extends Component {
     title: "RepoDetail"
   };
   componentDidMount() {
-    const { name } = this.props.navigation.state.params;
-    this.props.getRepoDetail("alancast", name);
+    const { username, name } = this.props.navigation.state.params;
+    this.props.getRepoDetail(username, name);
   }
   render() {
     const { repoInfo, loadingInfo } = this.props;

@@ -9,7 +9,8 @@ class Profile extends Component {
     title: "Profile"
   };
   componentDidMount() {
-    this.props.getUser("alancast");
+    const { username } = this.props.navigation.state.params;
+    this.props.getUser(username);
   }
 
   render() {
