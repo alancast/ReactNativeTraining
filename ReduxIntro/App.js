@@ -24,7 +24,7 @@ const client = axios.create({
   responseType: "json"
 });
 
-const store = createStore(reducer, applyMiddleware(logger, axiosMiddleware(client)));
+const store = createStore(reducer, applyMiddleware(axiosMiddleware(client), logger));
 
 export default class HelloWorldApp extends Component {
   render() {
