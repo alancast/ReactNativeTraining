@@ -12,12 +12,19 @@ import RepoList from "./RepoList";
 import Profile from "./Profile";
 import UserSelection from "./UserSelection";
 
+const logger = store => next => action => {
+  console.log('dispatching', action)
+  let result = next(action)
+  console.log('next state', store.getState())
+  return result
+}
+
 const client = axios.create({
   baseURL: "https://api.github.com",
   responseType: "json"
 });
 
-const store = createStore(reducer, applyMiddleware(axiosMiddleware(client)));
+const store = createStore(reducer, applyMiddleware(logger, axiosMiddleware(client)));
 
 export default class HelloWorldApp extends Component {
   render() {
